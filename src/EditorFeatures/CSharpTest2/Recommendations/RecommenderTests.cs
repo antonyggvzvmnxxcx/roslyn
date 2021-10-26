@@ -104,7 +104,7 @@ public abstract class RecommenderTests : TestBase
             else
             {
                 var result = (await RecommendKeywordsAsync(position, context)).SingleOrDefault();
-                AssertEx.NotNull(result);
+                Assert.NotNull(result);
                 Assert.Equal(KeywordText, result.Keyword);
                 if (matchPriority != null)
                 {

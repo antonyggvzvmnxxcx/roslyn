@@ -556,7 +556,7 @@ namespace Roslyn.Test.Utilities
             throw new Xunit.Sdk.XunitException(string.Format(format, args));
         }
 
-        public static void NotNull<T>([NotNull] T @object, string message = null)
+        public static void NotNull<T>([NotNull] T @object, string message)
         {
             Assert.False(AssertEqualityComparer<T>.IsNull(@object), message);
         }
@@ -1007,12 +1007,6 @@ namespace Roslyn.Test.Utilities
         }
 
 #nullable enable
-        public static void NotNull<T>([NotNull] T value)
-        {
-            Assert.NotNull(value);
-            Debug.Assert(value is object);
-        }
-
         public static void Contains<T>(IEnumerable<T> collection, Predicate<T> filter, Func<T, string>? itemInspector = null, string? itemSeparator = null)
         {
             foreach (var item in collection)

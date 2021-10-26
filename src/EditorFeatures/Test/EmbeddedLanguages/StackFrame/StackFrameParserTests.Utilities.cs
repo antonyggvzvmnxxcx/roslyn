@@ -36,7 +36,7 @@ public sealed partial class StackFrameParserTests
             return;
         }
 
-        AssertEx.NotNull(tree);
+        Assert.NotNull(tree);
         VerifyCharacterSpans(input, tree);
 
         if (methodDeclaration is null)

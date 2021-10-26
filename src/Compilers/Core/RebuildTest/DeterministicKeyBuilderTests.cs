@@ -95,7 +95,7 @@ namespace Microsoft.CodeAnalysis.Rebuild.UnitTests
                 errorLoggerOpt: null,
                 analyzerConfigOptions: default,
                 globalConfigOptions: default);
-            AssertEx.NotNull(compilation);
+            Assert.NotNull(compilation);
             Assert.Empty(writer.GetStringBuilder().ToString());
             var obj = GetSyntaxTreeValues(compilation, compiler.Arguments.PathMap);
             AssertJsonCore(expected, obj.ToString(Formatting.Indented));
