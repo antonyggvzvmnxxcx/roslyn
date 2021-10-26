@@ -134,11 +134,11 @@ namespace Roslyn.Test.Utilities
 
             if (expected == null)
             {
-                Fail("expected was null, but actual wasn't" + Environment.NewLine + message);
+                Assert.Fail("expected was null, but actual wasn't" + Environment.NewLine + message);
             }
             else if (actual == null)
             {
-                Fail("actual was null, but expected wasn't" + Environment.NewLine + message);
+                Assert.Fail("actual was null, but expected wasn't" + Environment.NewLine + message);
             }
             else if (!(comparer ?? AssertEqualityComparer<T>.Instance).Equals(expected, actual))
             {
@@ -157,7 +157,7 @@ namespace Roslyn.Test.Utilities
                         """;
                 }
 
-                Fail(message + Environment.NewLine + expectedAndActual);
+                Assert.Fail(message + Environment.NewLine + expectedAndActual);
             }
         }
 
@@ -313,7 +313,7 @@ namespace Roslyn.Test.Utilities
         {
             if (ReferenceEquals(expected, actual))
             {
-                Fail("expected and actual references are identical\r\n" + message);
+                Assert.Fail("expected and actual references are identical\r\n" + message);
             }
 
             if (expected == null || actual == null)
@@ -322,7 +322,7 @@ namespace Roslyn.Test.Utilities
             }
             else if (SequenceEqual(expected, actual, comparer))
             {
-                Fail("expected and actual sequences match\r\n" + message);
+                Assert.Fail("expected and actual sequences match\r\n" + message);
             }
         }
 
@@ -544,16 +544,6 @@ namespace Roslyn.Test.Utilities
             }
 
             return string.Join(separator, list.Select(itemInspector));
-        }
-
-        public static void Fail(string message)
-        {
-            throw new Xunit.Sdk.XunitException(message);
-        }
-
-        public static void Fail(string format, params object[] args)
-        {
-            throw new Xunit.Sdk.XunitException(string.Format(format, args));
         }
 
         public static void NotNull<T>([NotNull] T @object, string message)
@@ -873,7 +863,7 @@ namespace Roslyn.Test.Utilities
             var list = items.ToList();
             if (list.Count != 0)
             {
-                Fail($"Expected 0 items but found {list.Count}: {message}\r\nItems:\r\n    {string.Join("\r\n    ", list)}");
+                Assert.Fail($"Expected 0 items but found {list.Count}: {message}\r\nItems:\r\n    {string.Join("\r\n    ", list)}");
             }
         }
 
@@ -1003,7 +993,7 @@ namespace Roslyn.Test.Utilities
                     .AppendLine();
             }
 
-            Fail(stringBuilder.ToString());
+            Assert.Fail(stringBuilder.ToString());
         }
 
 #nullable enable
@@ -1017,7 +1007,7 @@ namespace Roslyn.Test.Utilities
                 }
             }
 
-            Fail("Filter does not match any item in the collection: " + Environment.NewLine +
+            Assert.Fail("Filter does not match any item in the collection: " + Environment.NewLine +
                 ToString(collection, itemSeparator ?? Environment.NewLine, itemInspector));
         }
 

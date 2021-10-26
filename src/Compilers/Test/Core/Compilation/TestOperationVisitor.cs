@@ -825,7 +825,7 @@ namespace Microsoft.CodeAnalysis.Test.Utilities
                                 semanticModel.Compilation.CreateBuiltinOperator(symbol.Name, method.ReturnType, method.Parameters[0].Type, method.Parameters[1].Type);
                                 break;
                             default:
-                                AssertEx.Fail($"Unexpected parameter count for built in method: {method.ToDisplayString()}");
+                                Assert.Fail($"Unexpected parameter count for built in method: {method.ToDisplayString()}");
                                 break;
                         }
                     }
