@@ -87,6 +87,11 @@ internal abstract class AbstractRemoveUnnecessaryImportsDiagnosticAnalyzer<TSynt
         var tree = context.SemanticModel.SyntaxTree;
         var cancellationToken = context.CancellationToken;
 
+        AnalyzeSemanticModel(context, tree, cancellationToken);
+    }
+
+    protected virtual void AnalyzeSemanticModel(SemanticModelAnalysisContext context, SyntaxTree tree, CancellationToken cancellationToken)
+    {
         var unnecessaryImports = UnnecessaryImportsProvider.GetUnnecessaryImports(context.SemanticModel, context.FilterSpan, cancellationToken);
         if (unnecessaryImports.Any())
         {
