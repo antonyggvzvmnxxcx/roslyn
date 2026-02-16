@@ -71,7 +71,7 @@ internal sealed class CSharpRemoveUnnecessaryImportsDiagnosticAnalyzer :
     protected override void AnalyzeSemanticModel(SemanticModelAnalysisContext context, SyntaxTree tree, CancellationToken cancellationToken)
     {
         // We've opted in to generated code analysis above, but we actually only want to analyze generated code for Razor
-        if (GeneratedCodeUtilities.IsGeneratedCode(tree, IsRegularCommentOrDocComment, cancellationToken) &&
+        if (context.IsGeneratedCode &&
             tree.FilePath.IndexOf("Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator") == -1)
         {
             return;

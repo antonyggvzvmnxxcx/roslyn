@@ -102,7 +102,7 @@ internal abstract class AbstractRemoveUnnecessaryImportsDiagnosticAnalyzer<TSynt
             // for us appropriately.
             var mergedImports = MergeImports(unnecessaryImports);
 
-            var descriptor = GeneratedCodeUtilities.IsGeneratedCode(tree, IsRegularCommentOrDocComment, cancellationToken)
+            var descriptor = context.IsGeneratedCode
                 ? _generatedCodeClassificationIdDescriptor
                 : _classificationIdDescriptor;
             var contiguousSpans = GetContiguousSpans(mergedImports);
