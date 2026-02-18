@@ -14,6 +14,4 @@ namespace Microsoft.CodeAnalysis.Editor.Commanding.Commands;
 /// </summary>
 [ExcludeFromCodeCoverage]
 internal sealed class ShowInheritanceMarginCommandArgs(ITextView textView, ITextBuffer subjectBuffer)
-    : EditorCommandArgs(textView, subjectBuffer)
-{
-}
+    : EditorCommandArgs(textView, subjectBuffer);
