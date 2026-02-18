@@ -369,5 +369,22 @@ Namespace Microsoft.VisualStudio.LanguageServices.UnitTests.ProjectSystemShim
                 Assert.Single(environment.Workspace.CurrentSolution.Projects.Single().MetadataReferences)
             End Using
         End Function
+
+        <WpfFact, WorkItem(39904, "https://devdiv.visualstudio.com/DevDiv/_workitems/edit/1279845")>
+        Public Async Function RemovingProjectReferencingItselfDoesNotBreakIfASecondProjectExists() As Task
+            Using environment = New TestEnvironment()
+                Const ReferencePath = "C:\project.dll"
+
+                Dim project1 = Await environment.ProjectFactory.CreateAndAddToWorkspaceAsync("project1", LanguageNames.CSharp, CancellationToken.None)
+                project1.OutputFilePath = ReferencePath
+                project1.AddMetadataReference(ReferencePath, MetadataReferenceProperties.Assembly)
+
+                Dim project2 = Await environment.ProjectFactory.CreateAndAddToWorkspaceAsync("project2", LanguageNames.CSharp, CancellationToken.None)
+                project2.OutputFilePath = ReferencePath
+
+                ' The removal of project one might accidentally try to convert the metadata reference to a project reference to project 2
+                project1.RemoveFromWorkspace()
+            End Using
+        End Function
     End Class
 End Namespace
