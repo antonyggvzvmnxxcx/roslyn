@@ -213,7 +213,7 @@ namespace Microsoft.CodeAnalysis.Rebuild.UnitTests
                 }
             }
 
-            Assert.True(false, $"Could not find reference with MVID {expectedMvid}");
+            Assert.Fail($"Could not find reference with MVID {expectedMvid}");
             throw null!;
         }
 

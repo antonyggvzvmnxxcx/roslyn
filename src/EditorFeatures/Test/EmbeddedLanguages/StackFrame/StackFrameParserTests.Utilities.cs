@@ -104,7 +104,7 @@ public sealed partial class StackFrameParserTests
 
                 if (textSeq[index++] != ch)
                 {
-                    Assert.True(false, PrintDifference());
+                    Assert.Fail(PrintDifference());
                 }
             }
         }

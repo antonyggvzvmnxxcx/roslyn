@@ -837,7 +837,7 @@ public abstract partial class AbstractCodeActionOrUserDiagnosticTest_NoEditor<
                         Consider using the title as the equivalence key instead of 'null'
                         """;
 
-                    Assert.False(true, $"""
+                    Assert.Fail($"""
                         Expected different 'CodeAction.EquivalenceKey' for code actions registered for same diagnostic:
                         - Name: '{provider.GetType().Name}'
                         - Title 1: '{codeAction.Title}'

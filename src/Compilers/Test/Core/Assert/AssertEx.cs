@@ -216,7 +216,7 @@ namespace Roslyn.Test.Utilities
             message.AppendLine("Actual:");
             message.AppendLine(actual);
 
-            Assert.True(false, message.ToString());
+            Assert.Fail(message.ToString());
         }
 
         public static void Equal<T>(
@@ -243,7 +243,7 @@ namespace Roslyn.Test.Utilities
                 return;
             }
 
-            Assert.True(false, GetAssertMessage(expected, actual, comparer, message, itemInspector, itemSeparator, expectedValueSourcePath, expectedValueSourceLine));
+            Assert.Fail(GetAssertMessage(expected, actual, comparer, message, itemInspector, itemSeparator, expectedValueSourcePath, expectedValueSourceLine));
         }
 
         public static void Equal<T>(
@@ -259,7 +259,7 @@ namespace Roslyn.Test.Utilities
             if (SequenceEqual(expected, actual, comparer))
                 return;
 
-            Assert.True(false, GetAssertMessage(expected, actual, comparer, message, itemInspector, itemSeparator, expectedValueSourcePath, expectedValueSourceLine));
+            Assert.Fail(GetAssertMessage(expected, actual, comparer, message, itemInspector, itemSeparator, expectedValueSourcePath, expectedValueSourceLine));
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace Roslyn.Test.Utilities
                 messageBuilder.AppendLine(line.Text.Replace("\r", "<CR>").Replace("\n", "<LF>"));
             }
 
-            Assert.True(false, messageBuilder.ToString());
+            Assert.Fail(messageBuilder.ToString());
         }
 
         public static void NotEqual<T>(IEnumerable<T> expected, IEnumerable<T> actual, IEqualityComparer<T> comparer = null, string message = null)
@@ -496,7 +496,7 @@ namespace Roslyn.Test.Utilities
             if (!expectedSet.SetEquals(actual))
             {
                 var message = GetAssertMessage(ToString(expected, ",\r\n", itemInspector: withQuotes), ToString(actual, ",\r\n", itemInspector: withQuotes));
-                Assert.True(false, message);
+                Assert.Fail(message);
             }
 
             string withQuotes(T t) => $"\"{Convert.ToString(t)}\"";
@@ -565,7 +565,7 @@ namespace Roslyn.Test.Utilities
 
             if (normalizedExpected != normalizedActual)
             {
-                Assert.True(false, GetAssertMessage(expected, actual, message, escapeQuotes, expectedValueSourcePath, expectedValueSourceLine));
+                Assert.Fail(GetAssertMessage(expected, actual, message, escapeQuotes, expectedValueSourcePath, expectedValueSourceLine));
             }
         }
 
@@ -591,7 +591,7 @@ namespace Roslyn.Test.Utilities
                     message = GetAssertMessage(result1, result2);
                 }
 
-                Assert.True(false, message);
+                Assert.Fail(message);
             }
         }
 
@@ -942,7 +942,7 @@ namespace Roslyn.Test.Utilities
                     builder.AppendLine("},");
                 }
 
-                Assert.True(false, builder.ToString());
+                Assert.Fail(builder.ToString());
             }
         }
 
