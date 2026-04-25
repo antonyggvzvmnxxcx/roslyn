@@ -1012,7 +1012,7 @@ Make sure to use the "tt" specifier for languages for which it's necessary to ma
       </trans-unit>
       <trans-unit id="Intercepted_by_0">
         <source>Intercepted by '{0}'.</source>
-        <target state="new">Intercepted by '{0}'.</target>
+        <target state="translated">已被“{0}”拦截。</target>
         <note />
       </trans-unit>
       <trans-unit id="Introduce_constant">
