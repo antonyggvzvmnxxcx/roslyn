@@ -1012,7 +1012,7 @@ Asegúrese de usar el especificador "tt" para los idiomas para los que es necesa
       </trans-unit>
       <trans-unit id="Intercepted_by_0">
         <source>Intercepted by '{0}'.</source>
-        <target state="new">Intercepted by '{0}'.</target>
+        <target state="translated">Interceptado por "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="Introduce_constant">
