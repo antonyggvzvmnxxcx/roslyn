@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
 using Microsoft.CodeAnalysis.LanguageServer.HostWorkspace.FileWatching;
 using Microsoft.CodeAnalysis.ProjectSystem;
 using Microsoft.CodeAnalysis.Test.Utilities;
@@ -688,6 +689,14 @@ public sealed class DefaultFileChangeWatcherTests : IDisposable
 
         // Now create the directory and the file
         Directory.CreateDirectory(nonExistentDir);
+
+        // On Linux, a directory watch is not recursive. This is implemented for us by the .NET Runtime -- when it sees a new directory
+        // created, it adds that directory to the existing watch list. This means however that in the case of a new directory created
+        // and then immediately creating a new file, there's not a guarantee the file change could be seen if the directory watch
+        // hasn't been processed yet.
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            await Task.Delay(100);
+
         File.WriteAllText(filePath, "content");
 
         // The ancestor watcher should still pick up the event
