@@ -202,6 +202,44 @@ public class CohostRoslynCodeActionTest(ITestOutputHelper testOutputHelper) : Co
     }
 
     [Fact]
+    public Task GenerateDeconstructMethod_NoCodeBlock()
+        => VerifyCodeActionAsync(
+            csharpFile: """
+                using SomeProject;
+                using Microsoft.AspNetCore.Components;
+
+                public class C
+                {
+                    private void M()
+                    {
+                        (int x, int y) = $$new Component();
+                    }
+                }
+                """,
+            razorFile: """
+                This is a Razor document.
+
+                <Component></Component>
+
+                The end.
+                """,
+            expectedRazorFile: """
+                @using System
+                This is a Razor document.
+                
+                <Component></Component>
+                
+                The end.
+                @code {
+                    internal void Deconstruct(out int x, out int y)
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+                """,
+            codeActionName: RazorPredefinedCodeFixProviderNames.GenerateDeconstructMethod);
+
+    [Fact]
     public Task GenerateProperty_NoCodeBlock()
         => VerifyCodeActionAsync(
             csharpFile: """

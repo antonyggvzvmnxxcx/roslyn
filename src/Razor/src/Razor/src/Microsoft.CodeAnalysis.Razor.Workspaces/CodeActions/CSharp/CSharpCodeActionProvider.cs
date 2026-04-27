@@ -42,6 +42,7 @@ internal class CSharpCodeActionProvider(LanguageServerFeatureOptions languageSer
         RazorPredefinedCodeFixProviderNames.RemoveUnusedVariable,
         RazorPredefinedCodeFixProviderNames.GenerateConversion,
         RazorPredefinedCodeFixProviderNames.GenerateConstructor,
+        RazorPredefinedCodeFixProviderNames.GenerateDeconstructMethod,
         RazorPredefinedCodeFixProviderNames.GenerateMethod,
         RazorPredefinedCodeFixProviderNames.GenerateVariable,
     ];
