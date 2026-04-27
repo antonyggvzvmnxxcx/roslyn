@@ -764,6 +764,22 @@ public sealed class DefaultFileChangeWatcherTests : IDisposable
     }
 
     [Fact]
+    public void SharedWatcher_MultipleContexts_ShareSameDirectoryWatcherEvenIfExtraSlashes()
+    {
+        var tempDirectory = _tempRoot.CreateDirectory();
+        var watcher = new DefaultFileChangeWatcher();
+
+        using var context1 = watcher.CreateContext([new WatchedDirectory(tempDirectory.Path, extensionFilters: [])]);
+        string pathWithExtraSeparators = tempDirectory.Path.Replace(Path.DirectorySeparatorChar.ToString(), Path.DirectorySeparatorChar.ToString() + Path.DirectorySeparatorChar);
+        using var context2 = watcher.CreateContext([new WatchedDirectory(pathWithExtraSeparators, extensionFilters: [])]);
+
+        // Both contexts should share the same underlying watcher entry
+        var watchedPath = Assert.Single(DefaultFileChangeWatcher.TestAccessor.GetWatchedDirectories(watcher));
+        Assert.Equal(tempDirectory.Path, watchedPath.path);
+        Assert.Empty(watchedPath.filters);
+    }
+
+    [Fact]
     public void SharedWatcher_DisposingOneContext_KeepsWatcherForOther()
     {
         var tempDirectory = _tempRoot.CreateDirectory();
