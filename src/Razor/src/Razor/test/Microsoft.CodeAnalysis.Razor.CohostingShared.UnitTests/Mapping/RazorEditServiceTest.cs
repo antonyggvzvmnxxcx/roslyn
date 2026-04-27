@@ -793,6 +793,132 @@ public class RazorEditServiceTest(ITestOutputHelper testOutput) : CohostEndpoint
                 """);
 
     [Fact]
+    public Task NewConversionOperator_ExistingCodeBlock()
+      => TestAsync(
+          csharpSource: """
+                class MyComponent : ComponentBase
+                {
+                    {|map1:private int M()
+                    {
+                        return 1;
+                    }|}
+                }
+                """,
+          razorSource: """
+                @code {
+                    {|map1:private int M()
+                    {
+                        return 1;
+                    }|}
+                }
+                """,
+          newCSharpSource: """
+                class MyComponent : ComponentBase
+                {
+                    public static explicit operator int(MyComponent component)
+                    {
+                        return 0;
+                    }
+
+                    private int M()
+                    {
+                        return 1;
+                    }
+                }
+                """,
+          expectedRazorSource: """
+                @code {
+                    public static explicit operator int(MyComponent component)
+                    {
+                        return 0;
+                    }
+
+                    private int M()
+                    {
+                        return 1;
+                    }
+                }
+                """);
+
+    [Fact]
+    public Task NewConversionOperator_NoCodeBlock()
+      => TestAsync(
+          csharpSource: """
+                class MyComponent : ComponentBase
+                {
+                }
+                """,
+          razorSource: """
+                <div></div>
+                """,
+          newCSharpSource: """
+                class MyComponent : ComponentBase
+                {
+                    public static explicit operator int(MyComponent component)
+                    {
+                        return 0;
+                    }
+                }
+                """,
+          expectedRazorSource: """
+                <div></div>
+                @code {
+                    public static explicit operator int(MyComponent component)
+                    {
+                        return 0;
+                    }
+                }
+                """);
+
+    [Fact]
+    public Task ChangedConversionOperatorBody_ExistingCodeBlock_IsNotAdded()
+      => TestAsync(
+          csharpSource: """
+                class MyComponent : ComponentBase
+                {
+                    {|map1:private int M()
+                    {
+                        return 1;
+                    }|}
+
+                    public static explicit operator int(MyComponent component)
+                    {
+                        return 0;
+                    }
+                }
+                """,
+          razorSource: """
+                @code {
+                    {|map1:private int M()
+                    {
+                        return 1;
+                    }|}
+                }
+                """,
+          newCSharpSource: """
+                class MyComponent : ComponentBase
+                {
+                    private int M()
+                    {
+                        return 2;
+                    }
+
+                    public static explicit operator int(MyComponent component)
+                    {
+                        return 1;
+                    }
+                }
+                """,
+          expectedRazorSource: """
+                @code {
+                    private int M()
+                    {
+                        return 2;
+                    }
+                }
+                """);
+
+    [Fact]
     public Task NewProperty_ExistingCodeBlock()
       => TestAsync(
           csharpSource: """
