@@ -203,6 +203,98 @@ public class AddUsingTests(ITestOutputHelper testOutputHelper) : CohostCodeActio
     }
 
     [Fact]
+    public async Task AddUsing_LegacyWithPageDirective()
+    {
+        var input = """
+            @page "/"
+
+            @functions
+            {
+                private [||]StringBuilder _x = new StringBuilder();
+            }
+            """;
+
+        var expected = """
+            @page "/"
+            @using System.Text
+
+            @functions
+            {
+                private StringBuilder _x = new StringBuilder();
+            }
+            """;
+
+        await VerifyCodeActionAsync(
+            input,
+            expected,
+            RazorPredefinedCodeFixProviderNames.AddImport,
+            fileKind: RazorFileKind.Legacy,
+            makeDiagnosticsRequest: true);
+    }
+
+    [Fact]
+    public async Task AddUsing_LegacyWithPageDirectiveAndTagHelpers_HtmlString()
+    {
+        var input = """
+            @page "/"
+            @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+            @{
+             var z = new [||]HtmlString("asdf");
+            }
+            """;
+
+        var expected = """
+            @page "/"
+            @using Microsoft.AspNetCore.Html
+            @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+            @{
+             var z = new HtmlString("asdf");
+            }
+            """;
+
+        await VerifyCodeActionAsync(
+            input,
+            expected,
+            RazorPredefinedCodeFixProviderNames.AddImport,
+            fileKind: RazorFileKind.Legacy,
+            addDefaultImports: false,
+            makeDiagnosticsRequest: true);
+    }
+
+    [Fact]
+    public async Task AddUsing_LegacyWithPageDirectiveWithoutRouteAndTagHelpers_HtmlString()
+    {
+        var input = """
+            @page
+            @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+            @{
+             var z = new [||]HtmlString("asdf");
+            }
+            """;
+
+        var expected = """
+            @page
+            @using Microsoft.AspNetCore.Html
+            @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+            @{
+             var z = new HtmlString("asdf");
+            }
+            """;
+
+        await VerifyCodeActionAsync(
+            input,
+            expected,
+            RazorPredefinedCodeFixProviderNames.AddImport,
+            fileKind: RazorFileKind.Legacy,
+            addDefaultImports: false,
+            makeDiagnosticsRequest: true);
+    }
+
+    [Fact]
     public async Task AddUsing_Typo()
     {
         var input = """
