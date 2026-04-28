@@ -1153,12 +1153,24 @@ internal sealed class CSharpOnTypeFormattingPass(
         var lastIndex = 0;
         foreach (var mapping in codeDocument.GetRequiredCSharpDocument().SourceMappingsSortedByOriginal)
         {
-            builder.Append(documentText, lastIndex, mapping.OriginalSpan.AbsoluteIndex - lastIndex);
-            builder.Append("<#");
-            builder.Append(documentText, mapping.OriginalSpan.AbsoluteIndex, mapping.OriginalSpan.Length);
-            builder.Append("#>");
+            var originalStart = mapping.OriginalSpan.AbsoluteIndex;
+            var originalEnd = originalStart + mapping.OriginalSpan.Length;
+            if (originalStart > lastIndex)
+            {
+                builder.Append(documentText, lastIndex, originalStart - lastIndex);
+            }
 
-            lastIndex = mapping.OriginalSpan.AbsoluteIndex + mapping.OriginalSpan.Length;
+            // Source mappings can overlap in legacy documents (for example around @page),
+            // so keep the debug rendering best-effort instead of throwing while logging.
+            var mappedStart = Math.Max(originalStart, lastIndex);
+            if (originalEnd > mappedStart)
+            {
+                builder.Append("<#");
+                builder.Append(documentText, mappedStart, originalEnd - mappedStart);
+                builder.Append("#>");
+            }
+
+            lastIndex = Math.Max(lastIndex, originalEnd);
         }
 
         builder.Append(documentText, lastIndex, documentText.Length - lastIndex);
