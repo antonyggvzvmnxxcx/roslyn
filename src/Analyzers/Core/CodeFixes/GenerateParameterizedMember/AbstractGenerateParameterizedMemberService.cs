@@ -72,5 +72,4 @@ internal abstract partial class AbstractGenerateParameterizedMemberService<TServ
 
         return result.ToImmutableAndClear();
     }
-
 }
