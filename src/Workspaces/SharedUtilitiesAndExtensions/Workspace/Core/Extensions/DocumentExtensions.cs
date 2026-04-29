@@ -97,13 +97,14 @@ internal static partial class DocumentExtensions
     public static bool IsRazorSourceGeneratedDocument(this Document document)
     {
         const string RazorSourceGeneratorTypeName = "Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator";
-#if CODE_STYLE
+
+#if WORKSPACE
+        return document is SourceGeneratedDocument { Identity.Generator.TypeName: RazorSourceGeneratorTypeName };
+#else
         // SourceGeneratedDocument.Identity is internal to the Workspaces assembly.
         return document is SourceGeneratedDocument &&
                document.FilePath is string filePath &&
                filePath.IndexOf(RazorSourceGeneratorTypeName, StringComparison.Ordinal) >= 0;
-#else
-        return document is SourceGeneratedDocument { Identity.Generator.TypeName: RazorSourceGeneratorTypeName };
 #endif
     }
 
