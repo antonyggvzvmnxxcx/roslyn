@@ -105,7 +105,7 @@ internal abstract partial class AbstractGenerateConstructorService<TService, TEx
             Contract.ThrowIfNull(TypeToGenerateIn);
             var codeGenerationContext = new CodeGenerationContext(
                 contextLocation: Token.GetLocation(),
-                allowGenerationIntoHiddenCode: IsRazorSourceGeneratedDocument);
+                allowGenerationIntoHiddenCode: static document => document.IsRazorSourceGeneratedDocument());
             if (!CodeGenerator.CanAdd(_document.Project.Solution, TypeToGenerateIn, codeGenerationContext, cancellationToken))
                 return false;
 
@@ -448,7 +448,7 @@ internal abstract partial class AbstractGenerateConstructorService<TService, TEx
                 document.Project.Solution,
                 new CodeGenerationContext(
                     contextLocation: Token.GetLocation(),
-                    allowGenerationIntoHiddenCode: IsRazorSourceGeneratedDocument));
+                    allowGenerationIntoHiddenCode: static document => document.IsRazorSourceGeneratedDocument()));
 
             return await CodeGenerator.AddMemberDeclarationsAsync(
                 context,
@@ -496,7 +496,7 @@ internal abstract partial class AbstractGenerateConstructorService<TService, TEx
                     document.Project.Solution,
                     new CodeGenerationContext(
                         contextLocation: Token.GetLocation(),
-                        allowGenerationIntoHiddenCode: IsRazorSourceGeneratedDocument)),
+                        allowGenerationIntoHiddenCode: static document => document.IsRazorSourceGeneratedDocument())),
                 TypeToGenerateIn,
                 GetRequiredLanguageService<SyntaxGenerator>(TypeToGenerateIn.Language).CreateMemberDelegatingConstructor(
                     GetRequiredLanguageService<SyntaxGeneratorInternal>(TypeToGenerateIn.Language),
@@ -514,11 +514,5 @@ internal abstract partial class AbstractGenerateConstructorService<TService, TEx
                 cancellationToken).ConfigureAwait(false);
         }
 
-        // SourceGeneratedDocument.Identity isn't available in the code style layer, so use the file path
-        // instead of the Razor workspaces extension method.
-        private static bool IsRazorSourceGeneratedDocument(Document document)
-            => document is SourceGeneratedDocument &&
-               document.FilePath is string filePath &&
-               filePath.IndexOf("Microsoft.NET.Sdk.Razor.SourceGenerators.RazorSourceGenerator", System.StringComparison.Ordinal) >= 0;
     }
 }
