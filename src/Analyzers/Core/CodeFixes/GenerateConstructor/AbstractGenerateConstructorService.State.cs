@@ -513,6 +513,5 @@ internal abstract partial class AbstractGenerateConstructorService<TService, TEx
                     IsContainedInUnsafeType),
                 cancellationToken).ConfigureAwait(false);
         }
-
     }
 }
